@@ -1,0 +1,13 @@
+{
+  "name": "elron-timetable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "author": "Johan Laas <johanlaas4@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^9.2.7",
+    "inquirer-autocomplete-prompt": "^3.0.0"
+  }
+}
