@@ -1,7 +1,7 @@
 # elron-timetable
 Elron timetable in your terminal
 
-Get Elron route times from your terminal
+Get Elron schedule from your terminal
 
 Install packages
 
