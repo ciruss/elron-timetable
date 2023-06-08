@@ -1,16 +1,9 @@
+import chalk from "chalk";
 import inquirer from "inquirer";
 import inquirerPrompt from "inquirer-autocomplete-prompt";
+import { formatDateTime, ticketLink } from "./utils.js";
 
 const bottomBar = new inquirer.ui.BottomBar();
-
-// format date from '2023-06-04T07:35:00.000+03:00' to '07:35'
-const formatDate = (date) => {
-  const dateObject = new Date(date);
-  const hours = dateObject.getHours().toString().padStart(2, '0');
-  const minutes = dateObject.getMinutes().toString().padStart(2, '0');
-
-  return `${hours}:${minutes}`;
-};
 
 (async () => {
   const stations = await fetch('https://api.ridango.com/v2/64/intercity/originstops');
@@ -71,19 +64,22 @@ const formatDate = (date) => {
 
         bottomBar.updateBottomBar('');
 
-        console.log(`${startStation} to ${endStation} --- price ${tripsJson.journeys[0].trips[0].product.price}`);
-
         if (tripsJson.journeys.length === 0) {
-          console.error('No trips found on this route');
+          console.error(chalk.bold.red('No trips found on this route'));
           return;
         }
 
+        console.log(chalk.green(`${startStation} - ${endStation} --- price ${tripsJson.journeys[0].trips[0].product.price} \n`));
+
+        console.log(chalk.underline(ticketLink(startStation, endStation)),'\n');
+
         tripsJson.journeys.forEach((trip) => {
-          const currentTime = formatDate(new Date());
-          const departureTime = formatDate(trip.trips[0].departure_time);
+          const currentTime = formatDateTime(new Date());
+          const departureTime = formatDateTime(trip.trips[0].departure_time);
+          const arrivalTime = formatDateTime(trip.trips[0].arrival_time);
 
           if (currentTime < departureTime) {
-            console.log(`Departure ${formatDate(trip.trips[0].departure_time)} arrival ${formatDate(trip.trips[0].arrival_time)}`);
+            console.log(`Departure ${departureTime} arrival ${arrivalTime}`);
           }
         });
       } catch (error) {
